@@ -1,0 +1,103 @@
+{% extends "ecommerce/base.html" %}
+{% block title %}
+Hairnic - My Orders
+{% endblock %}
+{% block content %}
+
+<!-- Hero Section -->
+<div class="container-fluid bg-primary hero-header mb-5">
+    <div class="container text-center">
+        <h1 class="display-4 text-white mb-3 animated slideInDown">My Orders</h1>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb justify-content-center mb-0 animated slideInDown">
+                <li class="breadcrumb-item"><a class="text-white" href="{% url 'home' %}">Home</a></li>
+                <li class="breadcrumb-item text-white active" aria-current="page">My Orders</li>
+            </ol>
+        </nav>
+    </div>
+</div>
+<!-- Hero End -->
+
+<!-- My Orders Section -->
+<div class="container py-5">
+    <h2 class="text-center mb-4">My Orders</h2>
+    <div class="table-responsive">
+        <table class="table table-bordered text-center">
+            <thead class="bg-light">
+                <tr>
+                    <th>Order ID</th>
+                    <th>Date</th>
+                    <th>Items</th>
+                    <th>Total Price</th>
+                    <th>Status</th>
+                    <th>Estimated Delivery</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Dummy Data -->
+                <tr>
+                    <td>1001</td>
+                    <td>2025-01-20</td>
+                    <td>
+                        <ul class="list-unstyled">
+                            <li>Shampoo x 2</li>
+                            <li>Hair Oil x 1</li>
+                        </ul>
+                    </td>
+                    <td>$25.50</td>
+                    <td><span class="badge bg-success">Delivered</span></td>
+                    <td>Delivered on 2025-01-22</td>
+                    <td>
+                        <a href="/download-receipt/1001" class="btn btn-sm btn-primary mb-2">Download Receipt</a>
+                        <button class="btn btn-sm btn-success" onclick="buyAgain('1001')">Buy Again</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>1002</td>
+                    <td>2025-01-22</td>
+                    <td>
+                        <ul class="list-unstyled">
+                            <li>Conditioner x 1</li>
+                        </ul>
+                    </td>
+                    <td>$10.00</td>
+                    <td><span class="badge bg-warning">Processing</span></td>
+                    <td>2025-01-25</td>
+                    <td>
+                        <a href="/download-receipt/1002" class="btn btn-sm btn-primary mb-2">Download Receipt</a>
+                        <button class="btn btn-sm btn-success" onclick="buyAgain('1002')">Buy Again</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>1003</td>
+                    <td>2025-01-23</td>
+                    <td>
+                        <ul class="list-unstyled">
+                            <li>Hair Mask x 3</li>
+                            <li>Comb x 2</li>
+                        </ul>
+                    </td>
+                    <td>$35.00</td>
+                    <td><span class="badge bg-danger">Pending</span></td>
+                    <td>2025-01-28</td>
+                    <td>
+                        <a href="/download-receipt/1003" class="btn btn-sm btn-primary mb-2">Download Receipt</a>
+                        <button class="btn btn-sm btn-success" onclick="buyAgain('1003')">Buy Again</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+    // Function to handle "Buy Again" action
+    function buyAgain(orderId) {
+        alert(`Order ${orderId} added to your cart for reordering!`);
+        // Simulate adding items to the cart (use actual logic if backend is involved)
+        console.log(`Order ${orderId} added to cart.`);
+    }
+</script>
+
+{% endblock %}

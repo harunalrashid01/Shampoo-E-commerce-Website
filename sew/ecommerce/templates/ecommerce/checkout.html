@@ -1,0 +1,172 @@
+{% extends "ecommerce/base.html" %}
+{% block title %}
+    Hairnic - Checkout
+{% endblock %}
+{% block content %}
+
+<!-- Hero Section -->
+<div class="container-fluid bg-primary hero-header mb-5">
+    <div class="container text-center">
+        <h1 class="display-4 text-white mb-3 animated slideInDown">Checkout</h1>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb justify-content-center mb-0 animated slideInDown">
+                <li class="breadcrumb-item"><a class="text-white" href="{% url 'home' %}">Home</a></li>
+                <li class="breadcrumb-item"><a class="text-white" href="{% url 'cart' %}">Cart</a></li>
+                <li class="breadcrumb-item text-white active" aria-current="page">Checkout</li>
+            </ol>
+        </nav>
+    </div>
+</div>
+<!-- Hero End -->
+
+<!-- Checkout Form Section -->
+<div class="container py-5">
+    <h2 class="text-center mb-4">Checkout</h2>
+    
+    <!-- Stepper Navigation -->
+    <div id="stepper" class="d-flex justify-content-between mb-4">
+        <button type="button" id="step-1-btn" class="btn btn-outline-primary w-25">Step 1</button>
+        <button type="button" id="step-2-btn" class="btn btn-outline-primary w-25" disabled>Step 2</button>
+        <button type="button" id="step-3-btn" class="btn btn-outline-primary w-25" disabled>Step 3</button>
+    </div>
+    
+    <!-- Checkout Form -->
+    <form id="checkout-form" method="POST" action="{% url 'checkout' %}">
+        {% csrf_token %}
+
+        <!-- Step 1: Customer Information -->
+        <div id="step-1" class="step">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="name">Full Name</label>
+                        <input type="text" id="name" name="name" class="form-control" required>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" name="email" class="form-control" required>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="address">Shipping Address</label>
+                <textarea id="address" name="address" class="form-control" rows="4" required></textarea>
+            </div>
+            <div class="form-group">
+                <label for="phone">Phone Number</label>
+                <input type="text" id="phone" name="phone" class="form-control" required>
+            </div>
+            <div class="text-center">
+                <button type="button" id="next-step-1" class="btn btn-primary py-2 px-4">Next Step</button>
+            </div>
+        </div>
+
+        <!-- Step 2: Order Summary -->
+        <div id="step-2" class="step" style="display:none;">
+            <h4 class="mb-4">Order Summary</h4>
+            <div id="order-summary">
+                <!-- Order Summary will be rendered here dynamically -->
+            </div>
+            <h4>Total Price: ${{ total_price }}</h4>
+            <div class="text-center">
+                <button type="button" id="next-step-2" class="btn btn-primary py-2 px-4">Next Step</button>
+            </div>
+        </div>
+
+       <!-- Step 3: Payment Method -->
+<div id="step-3" class="step" style="display:none;">
+    <h4 class="mb-4">Payment Method</h4>
+    <div class="form-check">
+        <input class="form-check-input" type="radio" name="payment_method" id="credit-card" value="credit-card" checked>
+        <label class="form-check-label" for="credit-card">Credit Card</label>
+    </div>
+    <div class="form-check">
+        <input class="form-check-input" type="radio" name="payment_method" id="paypal" value="paypal">
+        <label class="form-check-label" for="paypal">PayPal</label>
+    </div>
+    <div class="form-check">
+        <input class="form-check-input" type="radio" name="payment_method" id="upi" value="upi">
+        <label class="form-check-label" for="upi">UPI (Unified Payments Interface)</label>
+    </div>
+    <div class="form-check">
+        <input class="form-check-input" type="radio" name="payment_method" id="cod" value="cod">
+        <label class="form-check-label" for="cod">Cash on Delivery (COD)</label>
+    </div>
+    <hr>
+    <div class="text-center">
+        <button type="submit" class="btn btn-primary py-2 px-4">Confirm Order</button>
+    </div>
+</div>
+
+<script>
+    // Step 1 Next Button
+    document.getElementById("next-step-1").addEventListener("click", function() {
+        // Move to Step 2
+        document.getElementById("step-1").style.display = "none";
+        document.getElementById("step-2").style.display = "block";
+        document.getElementById("step-1-btn").disabled = true;
+        document.getElementById("step-2-btn").disabled = false;
+    });
+
+    // Step 2 Next Button
+    document.getElementById("next-step-2").addEventListener("click", function() {
+        // Move to Step 3
+        document.getElementById("step-2").style.display = "none";
+        document.getElementById("step-3").style.display = "block";
+        document.getElementById("step-2-btn").disabled = true;
+        document.getElementById("step-3-btn").disabled = false;
+    });
+
+    // Function to render the order summary dynamically
+    function renderOrderSummary() {
+        const orderSummary = document.getElementById("order-summary");
+        const cart = JSON.parse(localStorage.getItem("cart")) || {};
+        let orderSummaryHTML = `
+            <table class="table table-bordered text-center">
+                <thead class="bg-light">
+                    <tr>
+                        <th>Product</th>
+                        <th>Price</th>
+                        <th>Quantity</th>
+                        <th>Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+        `;
+
+        let totalPrice = 0;
+
+        for (let productName in cart) {
+            const product = cart[productName];
+            const productTotal = product.price * product.quantity;
+            totalPrice += productTotal;
+
+            orderSummaryHTML += `
+                <tr>
+                    <td>${productName}</td>
+                    <td>$${product.price.toFixed(2)}</td>
+                    <td>${product.quantity}</td>
+                    <td>$${productTotal.toFixed(2)}</td>
+                </tr>
+            `;
+        }
+
+        orderSummaryHTML += `
+                <tr>
+                    <td colspan="3"><strong>Total</strong></td>
+                    <td><strong>$${totalPrice.toFixed(2)}</strong></td>
+                </tr>
+            </tbody>
+        </table>
+        `;
+
+        orderSummary.innerHTML = orderSummaryHTML;
+    }
+
+    // Render order summary on page load
+    document.addEventListener("DOMContentLoaded", renderOrderSummary);
+</script>
+
+{% endblock %}
