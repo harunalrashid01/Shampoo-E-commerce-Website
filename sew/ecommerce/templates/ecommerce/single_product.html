@@ -1,0 +1,115 @@
+{% extends "ecommerce/base.html" %}
+
+{% block title %}
+Hairnic - Single Product Website Template
+{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<div class="container-fluid bg-primary hero-header mb-5 py-5">
+    <div class="container text-center text-white">
+       
+    </div>
+</div>
+<!-- Hero End -->
+
+<!-- Product Detail Section -->
+<div class="container py-5">
+    <div class="row">
+        <!-- Product Image -->
+        <div class="col-md-6 mb-4 product-image-container">
+            <div class="card shadow-sm border-0">
+                <img class="img-fluid card-img-top" src="{{ product.image.url}}" alt="Product Image" style="max-height: 500px; object-fit: contain;">
+            </div>
+        </div>
+
+        <!-- Product Info -->
+        <div class="col-md-6">
+            <div class="card shadow-sm border-0 p-4">
+                <h2 class="product-name mb-3">{{product.name}}</h2>
+                <p class="product-description mb-3">{{product.description}}</p>
+
+                <!-- Price and Discount -->
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h3 class="product-price text-primary">${{product.price}}</h3>
+                    <p class="price-discount text-muted text-decoration-line-through">$39.99</p>
+                </div>
+
+                <!-- Rating Section -->
+                <div class="product-rating mb-4">
+                    {% for i in product.rating_range %}
+                        <i class="fa fa-star text-warning"></i> <!-- Display filled star -->
+                        {% endfor %}
+                
+                        <!-- Empty Stars -->
+                        {% for i in product.empty_rating_range %}
+                        <i class="fa fa-star text-muted"></i> <!-- Display empty star -->
+                        {% endfor %}
+
+            
+                </div>
+
+                <!-- Add to Cart and Wishlist Buttons -->
+                <button class="add-to-cart-btn btn btn-primary w-100 mb-2" data-id="{{ product.id }}">Add to Cart</button>
+                <button class="add-to-wishlist-btn btn btn-outline-primary w-100">Add to Wishlist</button>
+            </div>
+            
+    <!-- Comment List -->
+    <div class="reviews">
+        <div class="review-item mb-4 p-3 border rounded shadow-sm">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+                <strong class="text-dark">JohnDoe</strong>
+                <small class="text-muted">Posted on 2025-01-31 12:00</small>
+            </div>
+            <p class="text-muted">This is a great product! Highly recommend it for anyone looking for a quality shampoo that nourishes the hair.</p>
+            <div class="rating">
+                <i class="fa fa-star text-warning"></i>
+                <i class="fa fa-star text-warning"></i>
+                <i class="fa fa-star text-warning"></i>
+                <i class="fa fa-star text-muted"></i>
+                <i class="fa fa-star text-muted"></i>
+            </div>
+        </div>
+
+        <div class="review-item mb-4 p-3 border rounded shadow-sm">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+                <strong class="text-dark">JaneDoe</strong>
+                <small class="text-muted">Posted on 2025-01-30 15:45</small>
+            </div>
+            <p class="text-muted">Not bad, but I think it could be improved. The smell is nice, but I expected more shine after using it.</p>
+            <div class="rating">
+                <i class="fa fa-star text-warning"></i>
+                <i class="fa fa-star text-warning"></i>
+                <i class="fa fa-star text-muted"></i>
+                <i class="fa fa-star text-muted"></i>
+                <i class="fa fa-star text-muted"></i>
+            </div>
+        </div>
+    </div>
+
+    <!-- Comment Form -->
+    <div class="comment-form mt-4">
+        <h5 class="text-center mb-3">Add a Review</h5>
+        <textarea class="form-control mb-3" rows="4" placeholder="Share your thoughts..."></textarea>
+        <div class="d-flex justify-content-between">
+            <div class="d-flex align-items-center">
+                <label for="rating" class="me-2">Rating:</label>
+                <select id="rating" class="form-select w-auto">
+                    <option value="5">5 Stars</option>
+                    <option value="4">4 Stars</option>
+                    <option value="3">3 Stars</option>
+                    <option value="2">2 Stars</option>
+                    <option value="1">1 Star</option>
+                </select>
+            </div>
+            <button class="btn btn-primary">Post Review</button>
+        </div>
+    </div>
+</div>
+        </div>
+    </div>
+</div>
+<!-- Product Detail End -->
+{% endblock %}
+
+

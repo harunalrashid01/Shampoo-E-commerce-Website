@@ -1,0 +1,121 @@
+{% extends "ecommerce/base.html" %}
+
+{% block title %}
+    {{ product.name }} - Hairnic
+{% endblock %}
+
+{% block content %}
+    <!-- Hero Start -->
+    <div class="container-fluid bg-primary hero-header mb-5">
+        <div class="container text-center">
+            <h1 class="display-4 text-white mb-3 animated slideInDown">Product Details</h1>
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb justify-content-center mb-0 animated slideInDown">
+                    <li class="breadcrumb-item"><a class="text-white" href="#">Home</a></li>
+                    <li class="breadcrumb-item"><a class="text-white" href="#">Shop</a></li>
+                    <li class="breadcrumb-item text-white active" aria-current="page">{{ product.name }}</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+    <!-- Hero End -->
+
+    <!-- Product Details Start -->
+    <div class="container-fluid py-5">
+        <div class="container">
+            <div class="row g-5">
+                <div class="col-lg-6 wow fadeIn" data-wow-delay="0.1s">
+                    <img class="img-fluid" src="{{ product.image.url }}" alt="{{ product.name }}">
+                </div>
+                <div class="col-lg-6 wow fadeIn" data-wow-delay="0.5s">
+                    <h1 class="text-primary mb-4">{{ product.name }}</h1>
+                    <p class="mb-4">{{ product.description }}</p>
+                    <h4 class="text-success mb-4">${{ product.price }}</h4>
+
+                    <!-- Add to Cart Form -->
+                    <form method="POST" action="{% url 'add_to_cart' product.id %}">
+                        {% csrf_token %}
+                        <div class="mb-4">
+                            <label for="quantity" class="form-label">Quantity</label>
+                            <input type="number" id="quantity" name="quantity" value="1" min="1" class="form-control" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary py-2 px-4">Add to Cart</button>
+                    </form>
+
+                    <!-- Social Sharing -->
+                    <div class="mt-4">
+                        <h5>Share:</h5>
+                        <a href="#" class="text-dark me-3"><i class="fa fa-facebook"></i></a>
+                        <a href="#" class="text-dark me-3"><i class="fa fa-twitter"></i></a>
+                        <a href="#" class="text-dark me-3"><i class="fa fa-instagram"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Product Details End -->
+
+    <!-- Product Reviews Start -->
+    <div class="container-fluid py-5 bg-light">
+        <div class="container">
+            <h3 class="text-primary mb-4">Customer Reviews</h3>
+
+            <div class="row g-4">
+                <div class="col-lg-6 wow fadeIn" data-wow-delay="0.1s">
+                    <div class="review-item border p-3">
+                        <div class="d-flex justify-content-between mb-2">
+                            <h5 class="text-dark mb-0">John Doe</h5>
+                            <p class="text-warning mb-0">
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star"></i>
+                            </p>
+                        </div>
+                        <p class="mb-4">This product is amazing! It has helped me with hair growth and has a great fragrance.</p>
+                    </div>
+                </div>
+
+                <div class="col-lg-6 wow fadeIn" data-wow-delay="0.3s">
+                    <div class="review-item border p-3">
+                        <div class="d-flex justify-content-between mb-2">
+                            <h5 class="text-dark mb-0">Jane Smith</h5>
+                            <p class="text-warning mb-0">
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star"></i>
+                            </p>
+                        </div>
+                        <p class="mb-4">The product worked wonders on my hair. Highly recommend it for anyone dealing with hair fall!</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Review Form -->
+            <div class="mt-5">
+                <h4 class="text-primary mb-4">Write a Review</h4>
+                <form method="POST" action="{% url 'add_review' product.id %}">
+                    {% csrf_token %}
+                    <div class="mb-4">
+                        <label for="review" class="form-label">Your Review</label>
+                        <textarea id="review" name="review" class="form-control" rows="4" required></textarea>
+                    </div>
+                    <div class="mb-4">
+                        <label for="rating" class="form-label">Rating</label>
+                        <select id="rating" name="rating" class="form-control" required>
+                            <option value="1">1 Star</option>
+                            <option value="2">2 Stars</option>
+                            <option value="3">3 Stars</option>
+                            <option value="4">4 Stars</option>
+                            <option value="5">5 Stars</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-primary py-2 px-4">Submit Review</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!-- Product Reviews End -->
+
+{% endblock %}

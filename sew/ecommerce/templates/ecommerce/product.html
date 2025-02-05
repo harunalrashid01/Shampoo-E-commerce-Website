@@ -4,39 +4,41 @@ Hairnic - Single Product Website Template
 {% endblock %}
 {% block content %}
 
-    <!-- Hero Start -->
-    <div class="container-fluid bg-primary hero-header mb-5">
-        <div class="container text-center">
-            <h1 class="display-4 text-white mb-3 animated slideInDown">Products</h1>
-            <nav aria-label="breadcrumb">
-                <ol class="breadcrumb justify-content-center mb-0 animated slideInDown">
-                    <li class="breadcrumb-item"><a class="text-white" href="#">Home</a></li>
-                    <li class="breadcrumb-item"><a class="text-white" href="#">Pages</a></li>
-                    <li class="breadcrumb-item text-white active" aria-current="page">Products</li>
-                </ol>
-            </nav>
-        </div>
+<!-- Hero Start -->
+<div class="container-fluid bg-primary hero-header mb-5">
+    <div class="container text-center">
+        <h1 class="display-4 text-white mb-3 animated slideInDown">Products</h1>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb justify-content-center mb-0 animated slideInDown">
+                <li class="breadcrumb-item"><a class="text-white" href="#">Home</a></li>
+                <li class="breadcrumb-item"><a class="text-white" href="#">Pages</a></li>
+                <li class="breadcrumb-item text-white active" aria-current="page">Products</li>
+            </ol>
+        </nav>
     </div>
-    <!-- Hero End -->
+</div>
+<!-- Hero End -->
 
 <!-- Product Start -->
 <div class="container-fluid py-5">
     <div class="container">
         <div class="mx-auto text-center wow fadeIn" data-wow-delay="0.1s" style="max-width: 600px;">
             <h1 class="text-primary mb-3"><span class="fw-light text-dark">Our Natural</span> Hair Products</h1>
-            <p class="mb-5">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis aliquet, erat non malesuada consequat, nibh erat tempus risus.</p>
+            <p class="mb-5">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis aliquet, erat non malesuada
+                consequat, nibh erat tempus risus.</p>
         </div>
 
         <!-- Category Filter -->
         <div class="mb-4">
             <h5>Filter by Category</h5>
-            <form method="GET" action="{% url 'product' %}">
+            <form method="GET" action="{% url 'shop' %}">
                 <select name="category" class="form-select">
                     <option value="">Select Category</option>
                     {% for category in categories %}
-                        <option value="{{ category.id }}" {% if category.id == request.GET.category %} selected {% endif %}>
-                            {{ category.name }}
-                        </option>
+                    <option value="{{ category.id }}" {% if category.id|stringformat:'s' == request.GET.category %}
+                        selected {% endif %}>
+                        {{ category.name }}
+                    </option>
                     {% endfor %}
                 </select>
                 <button type="submit" class="btn btn-primary mt-3">Filter</button>
@@ -44,89 +46,49 @@ Hairnic - Single Product Website Template
         </div>
 
         <div class="row g-4">
-            {% for product in products %}
-                <div class="col-md-6 col-lg-3 wow fadeIn" data-wow-delay="0.1s">
-                    <div class="product-item text-center border h-100 p-4">
-                        <!-- Displaying Product Image -->
-                        <img class="img-fluid mb-4" src="{{ product.image.url }}" alt="{{ product.name }}">
+            {% for product in page_obj %}
+            <div class="col-md-6 col-lg-3 wow fadeIn" data-wow-delay="0.1s" href="#">
+                <a href="singleproduct/{{product.id}}/" class="product-link"> <!-- Wrap the entire content with an anchor tag -->
+                <div class="product-item text-center border h-100 p-4">
+                    <!-- Displaying Product Image -->
+                    <img class="img-fluid mb-4" src="{{ product.image.url }}" alt="{{ product.name }}">
 
-                        <!-- Rating Section -->
-                        <div class="mb-2">
-                            <small class="fa fa-star text-primary"></small>
-                            <small class="fa fa-star text-primary"></small>
-                            <small class="fa fa-star text-primary"></small>
-                            <small class="fa fa-star text-primary"></small>
-                            <small class="fa fa-star text-primary"></small>
-                            <small>(99)</small>
-                        </div>
-
-                        <!-- Product Name -->
-                        <a href="" class="h6 d-inline-block mb-2">{{ product.name }}</a>
-
-                        <!-- Product Price -->
-                        <h5 class="text-primary mb-3">${{ product.price }}</h5>
-
-                        <!-- Add to Cart Button -->
-                        <a href="javascript:void(0);" 
-                        class="btn btn-outline-primary px-3" 
-                        onclick="addToCart('{{ product.name }}', {{ product.price }}, '{{ product.image.url }}')">
-                        Add To Cart
-                     </a>
-                     
+                    <!-- Rating Section -->
+                    <div class="mb-2">
+                        {% for i in product.rating_range %}
+                        <i class="fa fa-star text-warning"></i> <!-- Display filled star -->
+                        {% endfor %}
+                
+                        <!-- Empty Stars -->
+                        {% for i in product.empty_rating_range %}
+                        <i class="fa fa-star text-muted"></i> <!-- Display empty star -->
+                        {% endfor %}
+                        <small>{{product.no_of_people}}</small>
                     </div>
+
+                    <!-- Product Name -->
+                    <a href="" class="h6 d-inline-block mb-2">{{ product.name }}</a>
+
+                    <!-- Product Price -->
+                    <h5 class="text-primary mb-3">${{ product.price }}</h5>
+
+                    <!-- Add to Cart Button -->
+                    <a href="#" class="btn btn-outline-primary px-3 add-to-cart-btn" data-id="{{ product.id }}">
+                        Add To Cart
+                    </a>
+
                 </div>
-            {% endfor %}
+                </a>
+            </div>
+                {% endfor %}
 
             <div class="col-12 text-center">
-                <a class="btn btn-primary py-2 px-4" href="#">Load More Products</a>
+                {% if page_obj.has_next %}
+                <button class="btn btn-primary py-2 px-4" id="load-more-btn" data-next-page="{{ page_obj.next_page_number }}">Load More Products</button>
+                {% endif %}
             </div>
         </div>
     </div>
 </div>
-<script>
-    // On page load, initialize cart from local storage
-    document.addEventListener("DOMContentLoaded", () => {
-        const cartCountElement = document.getElementById("cart-item-count");
-        const storedCart = JSON.parse(localStorage.getItem("cart")) || {};
-        let totalItems = 0;
 
-        // Calculate total items in the cart
-        for (let product in storedCart) {
-            totalItems += storedCart[product].quantity;
-        }
-
-        // Update cart count in the DOM
-        cartCountElement.textContent = totalItems;
-    });
-
-    // Function to handle adding products to cart
-    function addToCart(productName, productPrice) {
-        const cartCountElement = document.getElementById("cart-item-count");
-        let cart = JSON.parse(localStorage.getItem("cart")) || {};
-
-        // If product already exists in cart, increase quantity
-        if (cart[productName]) {
-            cart[productName].quantity += 1;
-        } else {
-            // Add new product to the cart
-            cart[productName] = {
-                price: productPrice,
-                quantity: 1,
-            };
-        }
-
-        // Save updated cart to local storage
-        localStorage.setItem("cart", JSON.stringify(cart));
-
-        // Update cart count in the DOM
-        let totalItems = 0;
-        for (let product in cart) {
-            totalItems += cart[product].quantity;
-        }
-        cartCountElement.textContent = totalItems;
-    }
-</script>
-
-<!-- Product End -->
-
-    {% endblock %}    
+{% endblock %}

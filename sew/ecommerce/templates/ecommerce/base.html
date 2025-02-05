@@ -1,4 +1,4 @@
-{% load static %}    
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 
@@ -49,7 +49,7 @@
         <div class="container">
             <nav class="navbar navbar-expand-lg navbar-light p-0">
                 <a href="{% url 'home' %}" class="navbar-brand">
-                    <h2 class="text-white">Hairnic</h2>
+                    <h2 class="text-white">{{ website_name }}</h2>
                 </a>
                 <button type="button" class="navbar-toggler ms-auto me-0" data-bs-toggle="collapse"
                     data-bs-target="#navbarCollapse">
@@ -57,14 +57,19 @@
                 </button>
                 <div class="collapse navbar-collapse" id="navbarCollapse">
                     <div class="navbar-nav ms-auto">
-                        <a href="{% url 'home' %}" class="nav-item nav-link {% if request.resolver_match.url_name == 'home' %}active{% endif %}">Home</a>
-                        <a href="{% url 'about' %}" class="nav-item nav-link {% if request.resolver_match.url_name == 'about' %}active{% endif %}">About</a>
-                        <a href="{% url 'product' %}" class="nav-item nav-link {% if request.resolver_match.url_name == 'product' %}active{% endif %}">Products</a>
-                        <a href="{% url 'contact' %}" class="nav-item nav-link {% if request.resolver_match.url_name == 'contact' %}active{% endif %}">Contact</a>
+                        <a href="{% url 'home' %}"
+                            class="nav-item nav-link {% if request.resolver_match.url_name == 'home' %}active{% endif %}">Home</a>
+                        <a href="{% url 'about' %}"
+                            class="nav-item nav-link {% if request.resolver_match.url_name == 'about' %}active{% endif %}">About</a>
+                        <a href="{% url 'shop' %}"
+                            class="nav-item nav-link {% if request.resolver_match.url_name == 'product' %}active{% endif %}">Products</a>
+                        <a href="{% url 'contact' %}"
+                            class="nav-item nav-link {% if request.resolver_match.url_name == 'contact' %}active{% endif %}">Contact</a>
                     </div>
-                    <a href="{% url 'cart' %}" class="btn btn-light py-2 px-4 d-none d-lg-inline-block"> <i class="fas fa-shopping-cart"></i>
-                        <span class="cart-item-count" id="cart-item-count">0</span></a>
-                    
+                    <a href="{% url 'get-cart-products' %}" class="btn btn-light py-2 px-4 d-none d-lg-inline-block">
+                        <i class="fas fa-shopping-cart"></i>
+                        <span class="cart-item-count" id="cart-item-count">0</span>
+                    </a>
                 </div>
             </nav>
         </div>
@@ -74,27 +79,6 @@
     <!-- Content Section -->
     {% block content %}
     {% endblock %}
-    
-    <!-- Newsletter Start -->
-    <div class="container-fluid newsletter bg-primary py-5 my-5">
-        <div class="container py-5">
-            <div class="mx-auto text-center wow fadeIn" data-wow-delay="0.1s" style="max-width: 600px;">
-                <h1 class="text-white mb-3"><span class="fw-light text-dark">Let's Subscribe</span> The Newsletter</h1>
-                <p class="text-white mb-4">Subscribe now to get 30% discount on any of our products</p>
-            </div>
-            <div class="row justify-content-center">
-                <div class="col-md-7 wow fadeIn" data-wow-delay="0.5s">
-                    <div class="position-relative w-100 mt-3 mb-2">
-                        <input class="form-control w-100 py-4 ps-4 pe-5" type="text" placeholder="Enter Your Email"
-                            style="height: 48px;">
-                        <button type="button" class="btn shadow-none position-absolute top-0 end-0 mt-1 me-2"><i
-                                class="fa fa-paper-plane text-white fs-4"></i></button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- Newsletter End -->
 
     <!-- Footer Start -->
     <div class="container-fluid bg-white footer">
@@ -104,66 +88,41 @@
                     <a href="{% url 'home' %}" class="d-inline-block mb-3">
                         <h1 class="text-primary">Hairnic</h1>
                     </a>
-                    <p class="mb-0">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis aliquet, erat non malesuada consequat, nibh erat tempus risus, vitae porttitor purus nisl vitae purus.</p>
+                    <p class="mb-0">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis aliquet, erat non
+                        malesuada consequat, nibh erat tempus risus, vitae porttitor purus nisl vitae purus.</p>
                 </div>
                 <div class="col-md-6 col-lg-3">
                     <h5 class="mb-4">Get In Touch</h5>
-                    <p><i class="fa fa-map-marker-alt me-3"></i>123 Street, New York, USA</p>
-                    <p><i class="fa fa-phone-alt me-3"></i>+012 345 67890</p>
-                    <p><i class="fa fa-envelope me-3"></i>info@example.com</p>
+                    <p><i class="fa fa-map-marker-alt me-3"></i>{{ address }}</p>
+                    <p><i class="fa fa-phone-alt me-3"></i>{{phone }}</p>
+                    <p><i class="fa fa-envelope me-3"></i>{{ email }}</p>
                     <div class="d-flex pt-2">
-                        <a class="btn btn-square btn-outline-primary me-1" href="#"><i class="fab fa-twitter"></i></a>
-                        <a class="btn btn-square btn-outline-primary me-1" href="#"><i class="fab fa-facebook-f"></i></a>
-                        <a class="btn btn-square btn-outline-primary me-1" href="#"><i class="fab fa-instagram"></i></a>
-                        <a class="btn btn-square btn-outline-primary me-1" href="#"><i class="fab fa-linkedin-in"></i></a>
-                        <i class="fas fa-shopping-cart"></i>
+                        <a class="btn btn-square btn-outline-primary me-1" href="{{ social_links.twitter }}"><i
+                                class="fab fa-twitter"></i></a>
+                        <a class="btn btn-square btn-outline-primary me-1" href="{{ social_links.facebook }}"><i
+                                class="fab fa-facebook-f"></i></a>
+                        <a class="btn btn-square btn-outline-primary me-1" href="{{ social_links.instagram }}"><i
+                                class="fab fa-instagram"></i></a>
+                        <a class="btn btn-square btn-outline-primary me-1" href="{{ social_links.linkedin }}"><i
+                                class="fab fa-linkedin-in"></i></a>
                     </div>
-                    <a class="btn btn-square btn-outline-primary me-1" href="">
-                        <i class="fas fa-shopping-cart"></i>
-                      
-                            <span class="badge bg-primary rounded-pill">1</span>
-                       
-                    </a>
-                    
-                       
-                    
                 </div>
                 <div class="col-md-6 col-lg-3">
                     <h5 class="mb-4">Our Products</h5>
-                    <a class="btn btn-link" href="#">Hair Shining Shampoo</a>
-                    <a class="btn btn-link" href="#">Anti-dandruff Shampoo</a>
-                    <a class="btn btn-link" href="#">Anti Hair Fall Shampoo</a>
-                    <a class="btn btn-link" href="#">Hair Growing Shampoo</a>
-                    <a class="btn btn-link" href="#">Anti Smell Shampoo</a>
+                    {% for category in categories %}
+                    <a class="btn btn-link" href="#">{{category.name}}</a>
+                    {% endfor %}
                 </div>
                 <div class="col-md-6 col-lg-3">
                     <h5 class="mb-4">Popular Links</h5>
-                    <a class="btn btn-link" href="#">About Us</a>
-                    <a class="btn btn-link" href="#">Contact Us</a>
-                    <a class="btn btn-link" href="#">Privacy Policy</a>
-                    <a class="btn btn-link" href="#">Terms & Conditions</a>
-                    <a class="btn btn-link" href="#">Career</a>
+                    <a class="btn btn-link" href="{% url 'about'  %}">About Us</a>
+                    <a class="btn btn-link" href="{% url 'contact' %}">Contact Us</a>
+                    <a class="btn btn-link" href="{% url 'pp'  %}">Privacy Policy</a>
+                    <a class="btn btn-link" href="{% url 'terms' %}">Terms & Conditions</a>
                 </div>
             </div>
         </div>
-        <div class="container">
-            <div class="copyright">
-                <div class="row">
-                    <div class="col-md-6 text-center text-md-start mb-3 mb-md-0">
-                        &copy; <a class="border-bottom" href="#">Hairnic</a>, All Rights Reserved.
-                        Designed By <a class="border-bottom" href="https://htmlcodex.com">HTML Codex</a>
-                    </div>
-                    <div class="col-md-6 text-center text-md-end">
-                        <div class="footer-menu">
-                            <a href="#">Home</a>
-                            <a href="#">Cookies</a>
-                            <a href="#">Help</a>
-                            <a href="#">FAQs</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+
     </div>
     <!-- Footer End -->
     <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
@@ -179,48 +138,93 @@
     <!-- Template Javascript -->
     <script src="{% static 'ecommerce/js/main.js' %}"></script>
     <script>
-        // On page load, initialize cart from local storage
-        document.addEventListener("DOMContentLoaded", () => {
-            const cartCountElement = document.getElementById("cart-item-count");
-            const storedCart = JSON.parse(localStorage.getItem("cart")) || {};
-            let totalItems = 0;
-    
-            // Calculate total items in the cart
-            for (let product in storedCart) {
-                totalItems += storedCart[product].quantity;
+        document.addEventListener("DOMContentLoaded", function () {
+            let cartCountElement = document.getElementById("cart-item-count");
+
+            // Get cart data from localStorage
+            let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+            // Function to update cart count
+            function updateCartCount() {
+                let totalItems = cart.reduce((sum, item) => sum + item.count, 0);
+                cartCountElement.innerText = totalItems;
             }
-    
-            // Update cart count in the DOM
-            cartCountElement.textContent = totalItems;
+            updateCartCount();
+
+            // Function to update buttons for added/removed products
+            function updateCartButtons() {
+                document.querySelectorAll(".add-to-cart-btn").forEach(button => {
+                    let productId = button.getAttribute("data-id");
+                    let existingProduct = cart.find(item => item.id === productId);
+
+                    if (existingProduct) {
+                        button.innerText = "Remove"; // ✅ Change to "Remove"
+                        button.classList.remove("btn-outline-primary");
+                        button.classList.add("btn-danger"); // ✅ Red color for "Remove"
+                        button.dataset.added = "true"; // Mark it as added
+                    } else {
+                        button.innerText = "Add to Cart"; // ✅ Change back to "Add to Cart"
+                        button.classList.remove("btn-danger");
+                        button.classList.add("btn-outline-primary");
+                        button.dataset.added = "false"; // Mark it as not added
+                    }
+                });
+            }
+            updateCartButtons(); // Run on page load
+
+            // Event Delegation: Add to Cart / Remove Product
+            document.body.addEventListener("click", function (event) {
+                if (event.target.classList.contains("add-to-cart-btn")) {
+                    event.preventDefault();
+
+                    let button = event.target;
+                    let productId = button.getAttribute("data-id");
+                    let existingProduct = cart.find(item => item.id === productId);
+
+                    // If already in cart, remove it
+                    if (button.dataset.added === "true") {
+                        cart = cart.filter(item => item.id !== productId);
+                        localStorage.setItem("cart", JSON.stringify(cart));
+                        updateCartCount();
+                        updateCartButtons(); // ✅ Refresh button state
+                    } else {
+                        // Add product to cart
+                        if (!existingProduct) {
+                            cart.push({ id: productId, count: 1 });
+                        } else {
+                            existingProduct.count += 1;
+                        }
+                        localStorage.setItem("cart", JSON.stringify(cart));
+                        updateCartCount();
+                        updateCartButtons(); // ✅ Refresh button state
+                    }
+                }
+            });
+
+            // Handle "Load More" button click
+            document.getElementById('load-more-btn')?.addEventListener('click', function () {
+                var nextPage = this.getAttribute('data-next-page');
+                var url = "{% url 'shop' %}?page=" + nextPage;
+
+                fetch(url)
+                    .then(response => response.text())
+                    .then(data => {
+                        var newProducts = new DOMParser().parseFromString(data, "text/html").querySelector('.row.g-4');
+                        document.querySelector('.row.g-4').append(...newProducts.children);
+
+                        // Disable "Load More" button if no more products
+                        if (!newProducts.children.length) {
+                            document.getElementById('load-more-btn').remove();
+                        }
+
+                        // Apply "Add to Cart"/"Remove" state to newly loaded products
+                        updateCartButtons();
+                    });
+            });
         });
-    
-        // Function to handle adding products to cart
-        function addToCart(productName, productPrice) {
-            const cartCountElement = document.getElementById("cart-item-count");
-            let cart = JSON.parse(localStorage.getItem("cart")) || {};
-    
-            // If product already exists in cart, increase quantity
-            if (cart[productName]) {
-                cart[productName].quantity += 1;
-            } else {
-                // Add new product to the cart
-                cart[productName] = {
-                    price: productPrice,
-                    quantity: 1,
-                };
-            }
-    
-            // Save updated cart to local storage
-            localStorage.setItem("cart", JSON.stringify(cart));
-    
-            // Update cart count in the DOM
-            let totalItems = 0;
-            for (let product in cart) {
-                totalItems += cart[product].quantity;
-            }
-            cartCountElement.textContent = totalItems;
-        }
+
     </script>
-    </body>
+
+</body>
 
 </html>
